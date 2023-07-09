@@ -7,21 +7,27 @@ class WhatsAppJob {
         this.api = new WhatsAppApi.WhatsAppApi()
     }
 
-    async sendMessage() {
-        const contacts = await client.getContacts()
-        const contact = contacts.find(({ name }) => name === "Tarek Sebak")
-        const { id: { _serialized: chatId } } = contact
-      
-        await this.api.client.sendMessage(chatId, 'Message Text')
+    async sendMessageViaName(msg) {
+        this.contacts.forEach(async element => {
+            const whatsAppcontacts = await this.api.client.getContacts()
+            const contact = whatsAppcontacts.find(({ name }) => name === element)
+            const { id: { _serialized: chatId } } = contact
+        
+            await this.api.client.sendMessage(chatId, msg)
+        });
+
     }
 
-    async sendMessage(phoneNum, msg) {
-        this.api.client.isRegisteredUser(phoneNum + "@c.us").then(function(isRegistered) {
+    async sendMessageViaPhoneNumber(msg) {
+        this.contacts.forEach(async phoneNum => {
+        await this.api.client.isRegisteredUser(phoneNum + "@c.us").then(async function(isRegistered) {
             if(isRegistered) {
-                this.api.client.sendMessage(phoneNum + "@c.us", msg);
+               await this.api.client.sendMessage(phoneNum + "@c.us", msg);
             }
         })  
+    });
     }
+    
     
 }
 
