@@ -2,7 +2,7 @@ var ScheduleJobHandler = require('./core/schedulejobhandler');
 var WhatsAppJob = require('./core/jobs/whatsapp');
 
 var handler = ScheduleJobHandler.getInstance();
-whatsAppJob = new WhatsAppJob(["Tarek Sebak", "Abdel Razik Sebak"]);
+whatsAppJob = new WhatsAppJob([""]);
 
 //0 5 * * *
 handler.addJob('whatsapp-morning', '*/1 * * * *', function(){
