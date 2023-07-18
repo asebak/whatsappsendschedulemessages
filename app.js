@@ -20,7 +20,7 @@ handler.addJob('whatsapp-morning', '0 5 * * *', function(){
   }
 });
 
-handler.addJob('whatsapp-evening', '0 22 * * *', function(){
+/*handler.addJob('whatsapp-evening', '0 22 * * *', function(){
   console.log("running whatsapp morning message sender...")
   try {
     const randomElement = night[Math.floor(Math.random() * night.length)];
@@ -31,3 +31,4 @@ handler.addJob('whatsapp-evening', '0 22 * * *', function(){
     console.warn("error occured running whatsapp evening job:" + error);
   }
 });
+*/
