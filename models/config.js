@@ -1,45 +1,60 @@
-const morningMessages = [
-  "Good Morning", "Inshallah have a great day ahead", "I hope you slept well",
-  "Salam Walakum and enjoy your day ahead", "Inshallah have a blessed day ahead",
-  "Morning", "Hope you are well", "Hello", "I woke up thinking of you",
-  "Greetings", "How are you doing today?", "Have a pleasent day ahead", "Have a good day today.",
-  "A good day awaits.", "Just saying hello before going to the gym.", "Think positive today",
-  "Just wanted to say good morning", "Another morning to say hello to you.", "Happy to welcome you in the morning",
-  "I hope you had a good sleep!", "I hope you start today knowing how special you are",
-  "I hope your day is  wonderful", "Good morning, sunshine", "Good morning! Just want to let you know how grateful for you I am",
-  "Wishing you a peaceful morning and a fulfilling day", "Wishing the best morning", "Good morning! you are the best.", "I am inspired by you this morning",
-  "Good morning! You got this!", "Whatever today brings you, I know you can handle it.", "I hope you start your day knowing how special you are.",
-  "Subhanallah, I hope your morning is going as well as mine.", 
-];
+const OpenAI = require('openai');
 
-const nightMessages = [
-  "Good Evening", "Inshallah you sleep well", "I hope you will sleep well",
-  "Good night", "Sleep well", "Sweet dreams"
-];
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-const happyEmojis = [
-  "💙",
-  "💕",
-  "🤸‍♂",
-  "🐰",
-  "👌",
-  "👋",
-  "😝",
-  "💖",
-  "😗",
-  "🤲",
-  "🌻",
-  "🌞",
-  "🤩",
-  "🙂",
-  "😃",
-  "😁",
-  "😇",
-  "😌",
-  "😜",
-  "🤠",
-  "💪",
-  "💙"
-]
+async function generateMorningMessage() {
+  const prompt = `Generate a warm, natural, and unique good morning message for a loved one. 
+    The message should:
+    - Be 1-2 sentences
+    - Feel personal and genuine
+    - Include Islamic greetings if appropriate (like "Inshallah" or "Alhamdulillah")
+    - Be encouraging and positive
+    - End with an emoji (pick one that fits the tone)
+    
+    Return ONLY the message, nothing else.`;
 
-module.exports = {morningMessages, nightMessages, happyEmojis}  
+  try {
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.8,
+      max_tokens: 100,
+    });
+    return response.choices[0].message.content.trim();
+  } catch (error) {
+    console.error('Error generating morning message:', error);
+    return 'Good morning! I hope you have an amazing day ahead 💙';
+  }
+}
+
+async function generateNightMessage() {
+  const prompt = `Generate a warm, natural, and unique good night message for a loved one.
+    The message should:
+    - Be 1-2 sentences
+    - Feel personal and genuine
+    - Include Islamic greetings if appropriate (like "Inshallah" or "Alhamdulillah")
+    - Be calming and comforting
+    - End with an emoji (pick one that fits the tone)
+    
+    Return ONLY the message, nothing else.`;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.8,
+      max_tokens: 100,
+    });
+    return response.choices[0].message.content.trim();
+  } catch (error) {
+    console.error('Error generating night message:', error);
+    return 'Good night! Sleep well and may you have sweet dreams 💙';
+  }
+}
+
+module.exports = {
+  generateMorningMessage,
+  generateNightMessage,
+};
